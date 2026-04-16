@@ -163,14 +163,14 @@ if page == "Overview":
             "SELECT condition, COUNT(*) as count FROM subjects GROUP BY condition", conn
         )
         fig = px.pie(cond_df, names="condition", values="count", title="Subjects by Condition")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col_b:
         trt_df = pd.read_sql_query(
             "SELECT treatment, COUNT(*) as count FROM subjects GROUP BY treatment", conn
         )
         fig = px.pie(trt_df, names="treatment", values="count", title="Subjects by Treatment")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -203,9 +203,14 @@ elif page == "Part 2: Cell Frequencies":
         filtered = filtered[filtered["sample"].str.contains(sample_search, case=False)]
 
     st.dataframe(
-        filtered.style.format({"percentage": "{:.2f}%", "total_count": "{:,.0f}", "count": "{:,.0f}"}),
-        use_container_width=True,
+        filtered,
+        width="stretch",
         height=400,
+        column_config={
+            "percentage":    st.column_config.NumberColumn("percentage",   format="%.2f%%"),
+            "total_count":   st.column_config.NumberColumn("total_count",  format="%d"),
+            "count":         st.column_config.NumberColumn("count",        format="%d"),
+        },
     )
     st.caption(f"Showing {len(filtered):,} rows (of {len(freq_df):,} total)")
 
@@ -228,7 +233,7 @@ elif page == "Part 2: Cell Frequencies":
         color_discrete_sequence=px.colors.qualitative.Set2,
     )
     fig.update_layout(showlegend=False)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -290,7 +295,7 @@ elif page == "Part 3: Statistical Analysis":
     for i in range(1, len(POPULATIONS) + 1):
         fig.update_yaxes(title_text="Frequency (%)", row=1, col=i)
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # Statistics table
     st.markdown("---")
@@ -324,7 +329,7 @@ elif page == "Part 3: Statistical Analysis":
         })
 
     stat_df = pd.DataFrame(stat_rows)
-    st.dataframe(stat_df, use_container_width=True, hide_index=True)
+    st.dataframe(stat_df, width="stretch", hide_index=True)
 
     sig_pops = [r["Population"] for r in stat_rows if "✅" in r["Significant (α=0.05)"]]
     if sig_pops:
@@ -364,12 +369,12 @@ elif page == "Part 4: Subset Analysis":
         st.subheader("Samples per Project")
         by_proj = df.groupby("project")["sample_id"].count().reset_index()
         by_proj.columns = ["Project", "Sample Count"]
-        st.dataframe(by_proj, hide_index=True, use_container_width=True)
+        st.dataframe(by_proj, hide_index=True, width="stretch")
         fig = px.bar(by_proj, x="Project", y="Sample Count", color="Project",
                      title="Samples per Project",
                      color_discrete_sequence=px.colors.qualitative.Pastel)
         fig.update_layout(showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col_b:
         st.subheader("Subjects: Responders / Non-Responders")
@@ -378,22 +383,22 @@ elif page == "Part 4: Subset Analysis":
         subj_resp["Response"] = subj_resp["Response"].map(
             {"yes": "Responder", "no": "Non-Responder"}
         ).fillna(subj_resp["Response"])
-        st.dataframe(subj_resp, hide_index=True, use_container_width=True)
+        st.dataframe(subj_resp, hide_index=True, width="stretch")
         fig = px.pie(subj_resp, names="Response", values="Subject Count",
                      title="Response Distribution",
                      color_discrete_sequence=["#4C9BE8", "#E8734C"])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col_c:
         st.subheader("Subjects: Males / Females")
         subj_sex = df.drop_duplicates("subject")["sex"].value_counts().reset_index()
         subj_sex.columns = ["Sex", "Subject Count"]
         subj_sex["Sex"] = subj_sex["Sex"].map({"M": "Male", "F": "Female"}).fillna(subj_sex["Sex"])
-        st.dataframe(subj_sex, hide_index=True, use_container_width=True)
+        st.dataframe(subj_sex, hide_index=True, width="stretch")
         fig = px.pie(subj_sex, names="Sex", values="Subject Count",
                      title="Sex Distribution",
                      color_discrete_sequence=["#6BAED6", "#FD8D3C"])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.markdown("---")
     st.subheader("Average B Cells – Melanoma Males, Responders, Baseline")
