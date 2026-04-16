@@ -1,6 +1,6 @@
 # Clinical Trial Analysis – Loblaw Bio
 
-Interactive analysis of immune cell population data from a clinical trial evaluating the drug candidate **miraclib**.
+Analysis of immune cell population data from a clinical trial evaluating **miraclib**.
 
 ---
 
@@ -12,9 +12,7 @@ make pipeline  # Run full analysis pipeline
 make dashboard # Launch interactive dashboard
 ```
 
-The dashboard will be available at `http://localhost:8501`.
-
-> **Dashboard link (deployed):** *(see submission form)*
+> **Dashboard link (deployed):** *https://teiko-assignment.streamlit.app/*
 
 ---
 
@@ -81,7 +79,7 @@ cell_counts ─┘
 
 Each analysis part lives in its own module (`analysis/part*.py`) so it can be run standalone or imported by the dashboard without side effects. `pipeline.py` imports and calls each module in sequence — no shell subprocesses — so failures surface with full Python tracebacks.
 
-The Streamlit dashboard (`dashboard/app.py`) uses `@st.cache_data` on all DB queries so repeated navigation between pages does not re-run SQL. All plots are Plotly (interactive) rather than static images to give Bob and his colleagues hover tooltips and zoom.
+The Streamlit dashboard (`dashboard/app.py`) uses `@st.cache_data` on all DB queries so repeated navigation between pages does not re-run SQL. All plots are Plotly (interactive) rather than static images.
 
 ---
 
