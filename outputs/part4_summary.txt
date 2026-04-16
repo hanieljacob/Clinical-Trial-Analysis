@@ -1,0 +1,21 @@
+Part 4: Data Subset Analysis
+==================================================
+Filter: Melanoma | PBMC | time_from_treatment_start=0 | Treatment=miraclib
+
+Samples per project:
+project  sample_count
+   prj1           384
+   prj3           272
+
+Subjects: Responders vs Non-Responders:
+response  subject_count
+     yes            331
+      no            325
+
+Subjects: Males vs Females:
+sex  subject_count
+  M            344
+  F            312
+
+Average B cells (melanoma males, responders, time=0): 10401.28
+  (n=184 samples)
